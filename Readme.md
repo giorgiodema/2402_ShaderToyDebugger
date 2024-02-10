@@ -20,3 +20,12 @@ The debugger currently supports a limited but essential subset of ShaderToy feat
 - `iFrame`
 
 These features are sufficient for basic debugging tasks. Users are encouraged to expand the functionality to include additional ShaderToy features as needed.
+
+## Instructions
+
+To integrate the shader code, follow these steps:
+
+1. Locate the designated areas within the `main.cpp` file.
+2. Insert the shader code into these designated areas.
+3. Compile the code using CMake.
+

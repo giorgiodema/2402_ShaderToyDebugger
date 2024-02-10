@@ -30,6 +30,13 @@ std::vector<vec4> buffer0(WINDOW_WIDTH * WINDOW_HEIGHT);
 #define iMouse GUI::mouseCoords()
 int iFrame = 0;
 
+/*
+*---- CUSTOM FUNCTIONS HERE ----
+*/
+/*
+*-------------------------------
+*/
+
 
 int main() {
 
