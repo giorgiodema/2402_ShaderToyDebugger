@@ -1,9 +1,12 @@
 #include "gui.hpp"
 
+using namespace glm;
+
 GLFWwindow * window;
 GLuint shaderProgram;
 GLuint VAO,VBO,EBO;
 GLuint texture;
+vec4 iMouse = vec4(0.);
 
 
 // Vertex shader
@@ -113,6 +116,23 @@ GLuint createShaderProgram() {
     return shaderProgram;
 }
 
+void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
+    int width, height;
+    glfwGetWindowSize(window, &width, &height);
+    iMouse = vec4(float(xpos),float(height)-float(ypos),iMouse.z,iMouse.w);
+}
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
+    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
+        iMouse.z = 1.;
+        iMouse.w = 1.;
+    }
+
+    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE) {
+        iMouse.z = 0.;
+        iMouse.w = 0.;
+    }
+}
+
 namespace GUI{
 
 void initialize(int width, int height, const char* title){
@@ -124,6 +144,9 @@ void initialize(int width, int height, const char* title){
         glfwTerminate();
         throw std::runtime_error("could not initialize GLEW");
     }
+    // Register events
+    glfwSetCursorPosCallback(window, mouse_callback);
+    glfwSetMouseButtonCallback(window, mouse_button_callback);
     // Shader program
     shaderProgram = createShaderProgram();
 
@@ -202,4 +225,9 @@ void cleanUp(){
     glfwDestroyWindow(window);
     glfwTerminate();
 }
+
+vec4 mouseCoords(){
+    return iMouse;
+}
+
 }

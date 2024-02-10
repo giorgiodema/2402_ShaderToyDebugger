@@ -15,6 +15,7 @@ namespace GUI {
     bool shouldClose();
     void drawPixelArray(std::vector<glm::vec4> &pixels, int width, int height);
     void cleanUp();
+    glm::vec4 mouseCoords();
 }
 
 #endif // GUI_H

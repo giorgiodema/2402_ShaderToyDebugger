@@ -5,31 +5,31 @@
 #include <glm/glm.hpp>
 #include <chrono>
 
+using namespace glm;
+
 /*
-* MACRO
+* AUSILIARY DEFINITIONS
 */
 #define WINDOW_WIDTH  800
 #define WINDOW_HEIGHT 600
 #define IDX(r,c)  ((r)*WINDOW_WIDTH + (c))
-#define fragColor buffer0[IDX(r,c)]
-#define fragCoord vec2(c,r)
-#define iResolution vec2(WINDOW_WIDTH,WINDOW_HEIGHT)
 inline float startTimer() {
     static thread_local auto start = std::chrono::high_resolution_clock::now();
     auto now = std::chrono::high_resolution_clock::now();
     return std::chrono::duration<float>(now - start).count();
 }
-#define iTime startTimer()
-
-/*
-* NAMESPACES
-*/
-using namespace glm;
-
-/*
-* GLOBAL VARIABLES
-*/
 std::vector<vec4> buffer0(WINDOW_WIDTH * WINDOW_HEIGHT);
+
+/*
+* SHADER INPUTS
+*/
+#define fragColor buffer0[IDX(r,c)]
+#define fragCoord vec2(c,r)
+#define iResolution vec2(WINDOW_WIDTH,WINDOW_HEIGHT)
+#define iTime startTimer()
+#define iMouse GUI::mouseCoords()
+int iFrame = 0;
+
 
 int main() {
 
@@ -41,7 +41,11 @@ int main() {
                 *----- SHADERTOY CODE HERE -----
                 */
                 vec2 uv = fragCoord/iResolution;
+                vec2 st = iMouse.xy()/iResolution.xy();
                 vec3 col = 0.5f + 0.5f*cos(iTime+uv.xyx()+vec3(0.0,2.0,4.0));
+                if(iMouse.z>=1.){
+                    col = vec3(length(uv-st));
+                }
                 fragColor = vec4(col,1.0);
                 /*
                 *-------------------------------
@@ -49,6 +53,7 @@ int main() {
             }
         }
         GUI::drawPixelArray(buffer0,WINDOW_WIDTH,WINDOW_HEIGHT);
+        iFrame += 1;
     }
     GUI::cleanUp();
     return 0;
